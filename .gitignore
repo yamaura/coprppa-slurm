@@ -9,6 +9,7 @@
 .libs
 __pycache__
 Makefile
+!.copr/Makefile
 autom4te.cache
 /api/full_version.map
 /compile_commands.json

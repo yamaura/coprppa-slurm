@@ -15,7 +15,7 @@ URL:		https://slurm.schedmd.com/
 %global slurm_source_dir %{name}-%{version}-%{rel}
 %endif
 
-Source:		%{slurm_source_dir}.tar.bz2
+Source:		https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
 
 # build options		.rpmmacros options	change to default action
 # ====================  ====================	========================
@@ -44,7 +44,7 @@ Source:		%{slurm_source_dir}.tar.bz2
 %bcond_with cray
 %bcond_with cray_network
 %bcond_with cray_shasta
-%bcond_with slurmrestd
+%bcond_without slurmrestd
 %bcond_with slurmsmwd
 %bcond_with multiple_slurmd
 %bcond_with ucx
@@ -53,8 +53,8 @@ Source:		%{slurm_source_dir}.tar.bz2
 # If they are not set they will still be compiled if the packages exist.
 %bcond_with hwloc
 %bcond_with hdf5
-%bcond_with lua
-%bcond_with numa
+%bcond_without lua
+%bcond_without numa
 %bcond_with pmix
 %bcond_with nvml
 %bcond_with jwt
@@ -77,6 +77,19 @@ Source:		%{slurm_source_dir}.tar.bz2
 %define _lto_cflags %{nil}
 
 Requires: munge
+
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  dbus-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  man2html
+BuildRequires:  perl-devel
+BuildRequires:  perl-ExtUtils-MakeMaker
+BuildRequires:  perl-interpreter
+BuildRequires:  perl-generators
+BuildRequires:  perl-podlators
 
 %{?systemd_requires}
 BuildRequires: systemd
@@ -142,6 +155,7 @@ BuildRequires: glib2-devel
 BuildRequires: pkgconfig
 %endif
 
+BuildRequires: perl-devel
 BuildRequires: perl(ExtUtils::MakeMaker)
 
 %if %{with lua}
@@ -403,7 +417,6 @@ notifies slurm about failed nodes.
 	%{?_with_freeipmi} \
 	%{?_with_hdf5} \
 	%{?_with_shared_libslurm} \
-	%{!?_with_slurmrestd:--disable-slurmrestd} \
 	%{?_without_x11:--disable-x11} \
 	%{?_with_ucx} \
 	%{?_with_jwt} \
